@@ -37,7 +37,7 @@
 }
 
 .film {
-  width: 250px;
+  width: 200px;
   padding: 10px;
   margin: 10px 20px;
   border-radius: 5px;
@@ -48,6 +48,7 @@
 
 .data-title {
   font-weight: 300;
+  font-size: 14px;
 }
 
 .film-title {
