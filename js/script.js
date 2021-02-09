@@ -14,6 +14,12 @@ methods: {
     .then(function(resp) {
       that.arrayFilm = resp.data.results;
       })
+  },
+  filmImg: function(film) {
+    if (film.poster_path === null) {
+      return 'placeholder.jpg'
+    }
+    return 'http://image.tmdb.org/t/p/w780' + film.poster_path;
   }
 }
 });

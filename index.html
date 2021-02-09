@@ -21,7 +21,7 @@
 
       <div class="film-container">
         <div class="film" v-for="film in arrayFilm">
-          <img :src="'http://image.tmdb.org/t/p/w780' +  film.poster_path">
+          <img :src="filmImg(film)">
           <div>
             <span class="data-title">Titolo: </span>
             <span class="data-text  film-title">{{film.title}}</span>

@@ -46,6 +46,10 @@
   flex-direction: column;
 }
 
+.film img {
+  margin-bottom: 5px;
+}
+
 .data-title {
   font-weight: 300;
   font-size: 14px;
