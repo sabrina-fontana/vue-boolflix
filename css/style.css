@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#app {
+  min-height: 100vh;
+  background: #141414;
+  color: white;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.search * {
+  margin: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  outline: none;
+
+}
+
+.film-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.film {
+  width: 200px;
+  padding: 5px;
+  margin: 20px;
+  border: 1px solid white;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
