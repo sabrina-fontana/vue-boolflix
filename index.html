@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -19,27 +20,33 @@
         </div>
       </header>
 
-      <div class="film-container">
-        <div class="film" v-for="film in arrayFilm">
-          <img :src="filmImg(film)">
-          <div>
-            <span class="data-title">Titolo: </span>
-            <span class="data-text  film-title">{{film.title}}</span>
-          </div>
-          <div>
-            <span class="data-title">Titolo originale: </span>
-            <span class="data-text">{{film.original_title}}</span>
-          </div>
-          <div>
-            <span class="data-title">Lingua: </span>
-            <span class="data-text">{{film.original_language}}</span>
-          </div>
-          <div>
-            <span class="data-title">Voto: </span>
-            <span class="data-text">{{film.vote_average}}</span>
+      <main>
+        <div class="film-container">
+          <div class="film" v-for="film in arrayFilm">
+            <img :src="filmImg(film)">
+            <div>
+              <span class="data-title">Titolo: </span>
+              <span class="data-text  film-title">{{film.title}}</span>
+            </div>
+            <div>
+              <span class="data-title">Titolo originale: </span>
+              <span class="data-text">{{film.original_title}}</span>
+            </div>
+            <div>
+              <span class="data-title">Lingua originale: </span>
+              <span class="data-text">{{film.original_language}}</span>
+            </div>
+            <div>
+              <span class="data-title">Voto: </span>
+              <span class="data-text">{{film.vote_average}}</span>
+            </div>
           </div>
         </div>
-      </div>
+        <div class="icon" v-if="arrayFilm.length > 0">
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </div>
+      </main>
 
     </div>
     <script src="js/script.js" charset="utf-8"></script>
