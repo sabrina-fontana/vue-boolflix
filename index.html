@@ -14,17 +14,29 @@
 
       <header>
         <div class="search">
-          <input type="text" placeholder="Cerca un film..." v-model="searchInput">
+          <input type="text" placeholder="Cerca un film..." v-model="searchInput" @keyup.enter="searchFilm">
           <button @click="searchFilm">Cerca</button>
         </div>
       </header>
 
       <div class="film-container">
         <div class="film" v-for="film in arrayFilm">
-          <span>Titolo: {{film.title}}</span>
-          <span>Titolo originale: {{film.original_title}}</span>
-          <span>Lingua: {{film.original_language}}</span>
-          <span>Voto: {{film.vote_average}}</span>
+          <div>
+            <span class="data-title">Titolo: </span>
+            <span class="data-text  film-title">{{film.title}}</span>
+          </div>
+          <div>
+            <span class="data-title">Titolo originale: </span>
+            <span class="data-text">{{film.original_title}}</span>
+          </div>
+          <div>
+            <span class="data-title">Lingua: </span>
+            <span class="data-text">{{film.original_language}}</span>
+          </div>
+          <div>
+            <span class="data-title">Voto: </span>
+            <span class="data-text">{{film.vote_average}}</span>
+          </div>
         </div>
       </div>
 
