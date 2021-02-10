@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
@@ -26,8 +27,8 @@
         <div class="results-container">
           <!-- *****FILM***** -->
           <div class="film" v-for="(film, index) in arrayFilm">
-            <img class="result-image" :src="resultImg(film)" @mouseenter="showInfo(film, index)">
-            <div class="result-info" @mouseleave="hideInfo(film, index)">
+            <img class="result-image" :src="resultImg(film)" @mouseenter="showInfo('film-info', index)">
+            <div class="result-info film-info" @mouseleave="hideInfo('film-info', index)">
               <div>
                 <span class="data-title">Titolo: </span>
                 <span class="data-text  film-title">{{film.title}}</span>
@@ -59,8 +60,8 @@
           </div>
           <!-- *****SERIE TV***** -->
           <div class="tv" v-for="(tv, index) in arrayTV">
-            <img class="result-image" :src="resultImg(tv)" @mouseover="showInfo(tv, index)">
-            <div class="result-info">
+            <img class="result-image" :src="resultImg(tv)" @mouseenter="showInfo('tv-info', index)">
+            <div class="result-info tv-info" @mouseleave="hideInfo('tv-info', index)">
               <div>
                 <span class="data-title">Titolo: </span>
                 <span class="data-text  film-title">{{tv.name}}</span>

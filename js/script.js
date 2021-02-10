@@ -50,17 +50,20 @@ methods: {
     if (language === 'cs') {
       language = 'cz'
     }
+    if (language === 'ur') {
+      language = 'pk'
+    }
     if (language === 'xx') {
       return '';
     }
     return 'https://www.countryflags.io/' + language + '/flat/24.png';
   },
-  showInfo: function(el, index) {
-    let info = document.getElementsByClassName('result-info')[index];
+  showInfo: function(className, index) {
+    let info = document.getElementsByClassName(className)[index];
     info.classList.add('active');
   },
-  hideInfo: function(el, index) {
-    let info = document.getElementsByClassName('result-info')[index];
+  hideInfo: function(className, index) {
+    let info = document.getElementsByClassName(className)[index];
     info.classList.remove('active');
   }
 }
