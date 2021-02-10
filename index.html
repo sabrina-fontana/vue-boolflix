@@ -15,15 +15,17 @@
 
       <header>
         <div class="search">
-          <input type="text" placeholder="Cerca un film..." v-model="searchInput" @keyup.enter="searchFilm">
-          <button @click="searchFilm">Cerca</button>
+          <input type="text" placeholder="Cerca un film..." v-model="searchInput" @keyup.enter="search">
+          <button @click="search">Cerca</button>
         </div>
       </header>
 
       <main>
-        <div class="film-container">
+
+        <div class="results-container">
+          <!-- *****FILM***** -->
           <div class="film" v-for="film in arrayFilm">
-            <img class="film-image" :src="filmImg(film)">
+            <img class="film-image" :src="resultImg(film)">
             <div>
               <span class="data-title">Titolo: </span>
               <span class="data-text  film-title">{{film.title}}</span>
@@ -35,7 +37,8 @@
             <div>
               <span class="data-title">Lingua originale: </span>
               <span class="data-text">
-                {{film.original_language}}
+                <!-- {{film.original_language}} -->
+                <span v-if="film.original_language === 'xx'">unknown</span>
                 <div class="film-language"><img :src="getFlag(film)"></div>
               </span>
             </div>
@@ -43,15 +46,47 @@
               <span class="data-title">Voto: </span>
               <span class="data-text">
                 <!-- tante stelle quanto il punteggio su base 5 -->
-                <i class="fa fa-star" aria-hidden="true" v-for="star in filmRating(film)"></i>
+                <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(film)"></i>
+                <span v-if="resultRating(film) === 0">0</span>
               </span>
             </div>
           </div>
+          <!-- *****SERIE TV***** -->
+          <div class="tv" v-for="tv in arrayTV">
+            <img class="film-image" :src="resultImg(tv)">
+            <div>
+              <span class="data-title">Titolo: </span>
+              <span class="data-text  film-title">{{tv.name}}</span>
+            </div>
+            <div>
+              <span class="data-title">Titolo originale: </span>
+              <span class="data-text">{{tv.original_name}}</span>
+            </div>
+            <div>
+              <span class="data-title">Lingua originale: </span>
+              <span class="data-text">
+                <!-- {{film.original_language}} -->
+                <span v-if="tv.original_language === 'xx'">unknown</span>
+                <div class="film-language"><img :src="getFlag(tv)"></div>
+              </span>
+            </div>
+            <div>
+              <span class="data-title">Voto: </span>
+              <span class="data-text">
+                <!-- tante stelle quanto il punteggio su base 5 -->
+                <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(tv)"></i>
+                <span v-if="resultRating(tv) === 0">0</span>
+              </span>
+            </div>
+          </div>
+
         </div>
+
         <div class="icon" v-if="arrayFilm.length > 0">
           <i class="fa fa-chevron-left" aria-hidden="true"></i>
           <i class="fa fa-chevron-right" aria-hidden="true"></i>
         </div>
+
       </main>
 
     </div>

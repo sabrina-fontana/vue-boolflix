@@ -2,31 +2,39 @@ var app = new Vue({
 el: '#app',
 data: {
   searchInput: '',
-  arrayFilm: []
+  arrayFilm: [],
+  arrayTV: []
 },
 methods: {
-  searchFilm: function() {
+  search: function() {
     let that = this;
     if (this.searchInput === '') {
-      return this.arrayFilm = [];
+      return [this.arrayFilm = [], this.arrayTV = []];
     }
+    // chiamata per film
     axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&query=' + this.searchInput)
     .then(function(resp) {
       that.arrayFilm = resp.data.results;
-      })
+    })
+    // chiamata per serie tv
+    axios.get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&query=' + this.searchInput)
+    .then(function(resp) {
+      that.arrayTV = resp.data.results;
+    })
+
   },
-  filmImg: function(film) {
-    if (film.poster_path === null) {
+  resultImg: function(el) {
+    if (el.poster_path === null) {
       return 'placeholder.png'
     }
-    return 'http://image.tmdb.org/t/p/w780' + film.poster_path;
+    return 'http://image.tmdb.org/t/p/w780' + el.poster_path;
   },
-  filmRating: function(film) {
+  resultRating: function(el) {
     // arrotondo i voti su base 5
-    return Math.round(film.vote_average / 2);
+    return Math.round(el.vote_average / 2);
   },
-  getFlag: function(film) {
-    let language = film.original_language;
+  getFlag: function(el) {
+    let language = el.original_language;
     if (language === 'en') {
       language = 'gb'
     }
@@ -39,10 +47,12 @@ methods: {
     if (language === 'ja') {
       language = 'jp'
     }
-    if (language === 'xx') {
-      return 'unknown'
+    if (language === 'cs') {
+      language = 'cz'
     }
-    console.log(language)
+    if (language === 'xx') {
+      return '';
+    }
     return 'https://www.countryflags.io/' + language + '/flat/24.png';
   }
 }
