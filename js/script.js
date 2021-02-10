@@ -20,6 +20,10 @@ methods: {
       return 'placeholder.png'
     }
     return 'http://image.tmdb.org/t/p/w780' + film.poster_path;
+  },
+  filmRating: function(film) {
+    // voti su base 5
+    return Math.round(film.vote_average / 2);
   }
 }
 });
