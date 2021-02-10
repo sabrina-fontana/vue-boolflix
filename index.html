@@ -14,6 +14,7 @@
     <div id="app">
 
       <header>
+        <div class="logo">BOOLFLIX</div>
         <div class="search">
           <input type="text" placeholder="Cerca un film..." v-model="searchInput" @keyup.enter="search">
           <button @click="search">Cerca</button>
@@ -25,7 +26,7 @@
         <div class="results-container">
           <!-- *****FILM***** -->
           <div class="film" v-for="film in arrayFilm">
-            <img class="film-image" :src="resultImg(film)">
+            <img class="result-image" :src="resultImg(film)">
             <div>
               <span class="data-title">Titolo: </span>
               <span class="data-text  film-title">{{film.title}}</span>
@@ -39,7 +40,7 @@
               <span class="data-text">
                 <!-- {{film.original_language}} -->
                 <span v-if="film.original_language === 'xx'">unknown</span>
-                <div class="film-language"><img :src="getFlag(film)"></div>
+                <div class="result-language"><img :src="getFlag(film)"></div>
               </span>
             </div>
             <div>
@@ -53,7 +54,7 @@
           </div>
           <!-- *****SERIE TV***** -->
           <div class="tv" v-for="tv in arrayTV">
-            <img class="film-image" :src="resultImg(tv)">
+            <img class="result-image" :src="resultImg(tv)">
             <div>
               <span class="data-title">Titolo: </span>
               <span class="data-text  film-title">{{tv.name}}</span>
@@ -67,7 +68,7 @@
               <span class="data-text">
                 <!-- {{film.original_language}} -->
                 <span v-if="tv.original_language === 'xx'">unknown</span>
-                <div class="film-language"><img :src="getFlag(tv)"></div>
+                <div class="result-language"><img :src="getFlag(tv)"></div>
               </span>
             </div>
             <div>

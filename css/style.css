@@ -11,10 +11,21 @@
   color: white;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+}
+
+.logo {
+  font-size: 35px;
+  font-weight: 700;
+  color: red;
+}
+
 .search {
   display: flex;
   justify-content: center;
-  padding: 20px;
 }
 
 .search * {
@@ -26,7 +37,6 @@
   outline: none;
   background: #2b2b2b;
   color: white;
-  font-weight: bold;
 }
 
 main {
@@ -56,10 +66,11 @@ main {
   flex-direction: column;
 }
 
-.film-image {
+.result-image {
   margin-bottom: 10px;
   width: 180px;
   height: 265px;
+  cursor: pointer;
 }
 
 .data-title {
@@ -67,10 +78,10 @@ main {
   font-size: 14px;
 }
 
-.film-language {
+.result-language {
   display: inline-block;
 }
 
-.film-language img {
+.result-language img {
   vertical-align: middle;
 }
