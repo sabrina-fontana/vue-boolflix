@@ -53,6 +53,12 @@ methods: {
     if (language === 'ur') {
       language = 'pk'
     }
+    if (language === 'zh') {
+      language = 'cn'
+    }
+    if (language === 'ko') {
+      language = 'kr'
+    }
     if (language === 'xx') {
       return '';
     }
@@ -66,6 +72,6 @@ methods: {
     let info = document.getElementsByClassName(className)[index];
     info.classList.remove('active');
   }
-}
+  }
 });
 Vue.config.devtools = true;

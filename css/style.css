@@ -67,6 +67,7 @@ main {
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
+  overflow-x: auto;
 }
 
 .icon {
@@ -75,8 +76,7 @@ main {
 
 .results-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
 }
 
 .film, .tv {
@@ -86,12 +86,13 @@ main {
   background: #2b2b2b;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .result-image {
   width: 220px;
   height: 330px;
-  position: relative;
+  /* position: relative; */
 }
 
 .result-info {
