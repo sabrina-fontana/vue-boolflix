@@ -22,8 +22,28 @@ methods: {
     return 'http://image.tmdb.org/t/p/w780' + film.poster_path;
   },
   filmRating: function(film) {
-    // voti su base 5
+    // arrotondo i voti su base 5
     return Math.round(film.vote_average / 2);
+  },
+  getFlag: function(film) {
+    let language = film.original_language;
+    if (language === 'en') {
+      language = 'gb'
+    }
+    if (language === 'da') {
+      language = 'dk'
+    }
+    if (language === 'el') {
+      language = 'gr'
+    }
+    if (language === 'ja') {
+      language = 'jp'
+    }
+    if (language === 'xx') {
+      return 'unknown'
+    }
+    console.log(language)
+    return 'https://www.countryflags.io/' + language + '/flat/24.png';
   }
 }
 });

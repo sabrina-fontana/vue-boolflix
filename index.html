@@ -23,7 +23,7 @@
       <main>
         <div class="film-container">
           <div class="film" v-for="film in arrayFilm">
-            <img :src="filmImg(film)">
+            <img class="film-image" :src="filmImg(film)">
             <div>
               <span class="data-title">Titolo: </span>
               <span class="data-text  film-title">{{film.title}}</span>
@@ -34,7 +34,10 @@
             </div>
             <div>
               <span class="data-title">Lingua originale: </span>
-              <span class="data-text">{{film.original_language}}</span>
+              <span class="data-text">
+                {{film.original_language}}
+                <div class="film-language"><img :src="getFlag(film)"></div>
+              </span>
             </div>
             <div>
               <span class="data-title">Voto: </span>
