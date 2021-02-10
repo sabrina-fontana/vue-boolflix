@@ -26,6 +26,7 @@
       <main>
 
         <div class="results-container">
+          <div class="title" v-if="arrayFilm.length > 0">film</div>
           <!-- *****FILM***** -->
           <div class="film" v-for="(film, index) in arrayFilm">
             <img class="result-image" :src="resultImg(film)" @mouseenter="showInfo('film-info', index)">
@@ -48,8 +49,10 @@
               <div>
                 <span class="data-title">Voto: </span>
                 <span class="data-text">
-                  <!-- tante stelle quanto il punteggio su base 5 -->
+                  <!-- stelle piene -->
                   <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(film)"></i>
+                  <!-- stelle vuote -->
+                  <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5 -resultRating(film))"></i>
                   <span v-if="resultRating(film) === 0">0</span>
                 </span>
               </div>
@@ -59,6 +62,10 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="results-container">
+          <div class="title" v-if="arrayTV.length > 0">serie TV</div>
           <!-- *****SERIE TV***** -->
           <div class="tv" v-for="(tv, index) in arrayTV">
             <img class="result-image" :src="resultImg(tv)" @mouseenter="showInfo('tv-info', index)">
@@ -81,8 +88,10 @@
               <div>
                 <span class="data-title">Voto: </span>
                 <span class="data-text">
-                  <!-- tante stelle quanto il punteggio su base 5 -->
+                  <!-- stelle piene -->
                   <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(tv)"></i>
+                  <!-- stelle vuote -->
+                  <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5- resultRating(tv))"></i>
                   <span v-if="resultRating(tv) === 0">0</span>
                 </span>
               </div>
@@ -92,7 +101,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
       </main>
