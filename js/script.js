@@ -54,6 +54,14 @@ methods: {
       return '';
     }
     return 'https://www.countryflags.io/' + language + '/flat/24.png';
+  },
+  showInfo: function(el, index) {
+    let info = document.getElementsByClassName('result-info')[index];
+    info.classList.add('active');
+  },
+  hideInfo: function(el, index) {
+    let info = document.getElementsByClassName('result-info')[index];
+    info.classList.remove('active');
   }
 }
 });

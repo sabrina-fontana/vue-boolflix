@@ -8,7 +8,27 @@
 #app {
   min-height: 100vh;
   background: #141414;
-  color: white;
+  color: #a3a3a3;
+}
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2b2b2b;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #2b2b2b;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #a3a3a3;
+  border-radius: 20px;
 }
 
 header {
@@ -43,7 +63,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1200px;
+  width: 1300px;
   margin: 0 auto;
 }
 
@@ -54,11 +74,11 @@ main {
 .results-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .film, .tv {
-  width: 200px;
-  padding: 10px;
+  padding: 6px;
   margin: 10px 20px;
   border-radius: 5px;
   background: #2b2b2b;
@@ -67,14 +87,37 @@ main {
 }
 
 .result-image {
-  margin-bottom: 10px;
-  width: 180px;
-  height: 265px;
+  width: 220px;
+  height: 330px;
   cursor: pointer;
+  position: relative;
+}
+
+.result-info {
+  color: #cecece;
+  position: absolute;
+  padding: 5px;
+  width: 220px;
+  height: 330px;
+  display: none;
+  overflow-y: auto;
+  background: rgba(20, 20, 20, 0.9)
+}
+
+.result-info::-webkit-scrollbar {
+  width: 5px;
+}
+
+.active {
+  display: block;
 }
 
 .data-title {
   font-weight: 300;
+  font-size: 13px;
+}
+
+.data-text {
   font-size: 14px;
 }
 
