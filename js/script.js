@@ -34,8 +34,8 @@ methods: {
   searchMovie: function() {
     this.arrayMovie = [];
     let that = this;
-    // chiamata per film (max 5 pagine)
-    for (var x = 0; x < 5; x++) {
+    // chiamata per film (5 pagine)
+    for (var x = 1; x <= 5; x++) {
       axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + x + '&query=' + this.searchInput)
       .then(function(resp) {
         that.arrayMovie = [...that.arrayMovie, ...resp.data.results];
@@ -45,8 +45,8 @@ methods: {
   searchTV: function() {
     this.arrayTV = [];
     let that = this;
-    // chiamata per serie tv
-    for (var x = 0; x < 5; x++) {
+    // chiamata per serie tv (5 pagine)
+    for (var x = 1; x <= 5; x++) {
       axios.get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + x + '&query=' + this.searchInput)
       .then(function(resp) {
         that.arrayTV = [...that.arrayTV, ...resp.data.results];
@@ -93,19 +93,6 @@ methods: {
       return '';
     }
     return 'https://www.countryflags.io/' + language + '/flat/24.png';
-  },
-  getActors: function() {
-    let that = this;
-    axios.get('https://api.themoviedb.org/3/movie/' + this.resultId + '/credits?api_key=a2092b04d9693f9c0da61a113dc5f29a')
-    .then(function(resp) {
-      let actors = resp.data.cast;
-      let names = [];
-      actors.forEach((element) => {
-        names.push(element.name);
-      })
-      that.movieActorsName = names;
-      console.log('ciao')
-    })
   },
   getMovieActors: function() {
     let that = this;
