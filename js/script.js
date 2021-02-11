@@ -5,8 +5,21 @@ data: {
   arrayFilm: [],
   arrayTV: [],
   resultId: 0,
+  movieGenres: [],
+  TVGenres: [],
   filmActorsName: [],
   TVActorsName: []
+},
+mounted() {
+  let that = this;
+  axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=a2092b04d9693f9c0da61a113dc5f29a')
+  .then(function(resp) {
+    that.movieGenres = resp.data.genres;
+    })
+  axios.get('https://api.themoviedb.org/3/genre/tv/list?api_key=a2092b04d9693f9c0da61a113dc5f29a')
+  .then(function(resp) {
+    that.TVGenres = resp.data.genres;
+    })
 },
 methods: {
   search: function() {
@@ -83,7 +96,6 @@ methods: {
         names.push(element.name);
       })
       that.filmActorsName = names;
-      console.log(that.filmActorsName.toString().replace(',', ', '))
     })
   },
   getTVActors: function() {
@@ -110,11 +122,21 @@ methods: {
     // ritorno una stringa
     return actors.toString().replace(/,/g, ', ')
   },
+  getGenre: function(el) {
+    let elGenres = [];
+    for (let x = 0; x < el.genre_ids.length; x++) {
+      this.movieGenres.forEach((genre) => {
+        if (el.genre_ids[x] === genre.id) {
+          elGenres.push(genre.name);
+        }
+      })
+    }
+    return elGenres.toString().replace(/,/g, ', ')
+  },
   showInfo: function(className, index, el) {
     let info = document.getElementsByClassName(className)[index];
     info.classList.add('active');
     this.resultId = el.id;
-    console.log(this.resultId)
     if (className.includes('film')) {
       this.getFilmActors();
     } else if (className.includes('tv')) {

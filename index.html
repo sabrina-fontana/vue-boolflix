@@ -56,7 +56,11 @@
                 </span>
               </div>
               <div>
-                <span class="data-title">Actors: </span>
+                <span class="data-title">Genere: </span>
+                <span class="data-text" v-for="genre in getGenre(film)">{{genre}}</span>
+              </div>
+              <div>
+                <span class="data-title">Attori: </span>
                 <span class="data-text">{{showFilmActors()}}</span>
               </div>
               <div>
@@ -99,7 +103,7 @@
                 </span>
               </div>
               <div>
-                <span class="data-title">Actors: </span>
+                <span class="data-title">Attori: </span>
                 <span class="data-text">{{showTVActors()}}</span>
               </div>
               <div>
