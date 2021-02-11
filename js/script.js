@@ -2,39 +2,41 @@ var app = new Vue({
 el: '#app',
 data: {
   searchInput: '',
-  arrayFilm: [],
+  arrayMovie: [],
   arrayTV: [],
   resultId: 0,
   movieGenres: [],
   TVGenres: [],
-  filmActorsName: [],
+  movieActorsName: [],
   TVActorsName: []
 },
 mounted() {
   let that = this;
-  axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=a2092b04d9693f9c0da61a113dc5f29a')
+  axios
+  .get('https://api.themoviedb.org/3/genre/movie/list?api_key=a2092b04d9693f9c0da61a113dc5f29a')
   .then(function(resp) {
     that.movieGenres = resp.data.genres;
-    })
-  axios.get('https://api.themoviedb.org/3/genre/tv/list?api_key=a2092b04d9693f9c0da61a113dc5f29a')
+  })
+  axios
+  .get('https://api.themoviedb.org/3/genre/tv/list?api_key=a2092b04d9693f9c0da61a113dc5f29a')
   .then(function(resp) {
     that.TVGenres = resp.data.genres;
-    })
+  })
 },
 methods: {
   search: function() {
     if (this.searchInput === '') {
-      return [this.arrayFilm = [], this.arrayTV = []];
+      return [this.arrayMovie = [], this.arrayTV = []];
     }
-    this.searchFilm();
+    this.searchMovie();
     this.searchTV();
   },
-  searchFilm: function() {
+  searchMovie: function() {
     let that = this;
     // chiamata per film
     axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&query=' + this.searchInput)
     .then(function(resp) {
-      that.arrayFilm = resp.data.results;
+      that.arrayMovie = resp.data.results;
     })
   },
   searchTV: function() {
@@ -86,7 +88,7 @@ methods: {
     }
     return 'https://www.countryflags.io/' + language + '/flat/24.png';
   },
-  getFilmActors: function() {
+  getMovieActors: function() {
     let that = this;
     axios.get('https://api.themoviedb.org/3/movie/' + this.resultId + '/credits?api_key=a2092b04d9693f9c0da61a113dc5f29a')
     .then(function(resp) {
@@ -95,7 +97,8 @@ methods: {
       actors.forEach((element) => {
         names.push(element.name);
       })
-      that.filmActorsName = names;
+      that.movieActorsName = names;
+      console.log('ciao')
     })
   },
   getTVActors: function() {
@@ -110,22 +113,18 @@ methods: {
       that.TVActorsName = names;
     })
   },
-  showFilmActors: function() {
+  showActors: function(actorsArray) {
     // solo i primi 5 attori
-    let actors = this.filmActorsName.slice(0, 5);
+    let actors = actorsArray.slice(0, 5);
     // ritorno una stringa
     return actors.toString().replace(/,/g, ', ')
   },
-  showTVActors: function() {
-    // solo i primi 5 attori
-    let actors = this.TVActorsName.slice(0, 5);
-    // ritorno una stringa
-    return actors.toString().replace(/,/g, ', ')
-  },
-  getGenre: function(el) {
+  getGenre: function(el, genreArray) {
     let elGenres = [];
+    // ciclo tra tutti i generi del film/serie tv
     for (let x = 0; x < el.genre_ids.length; x++) {
-      this.movieGenres.forEach((genre) => {
+      // ciclo nell'array dei generi possibili e confronto gli id
+      genreArray.forEach((genre) => {
         if (el.genre_ids[x] === genre.id) {
           elGenres.push(genre.name);
         }
@@ -137,8 +136,8 @@ methods: {
     let info = document.getElementsByClassName(className)[index];
     info.classList.add('active');
     this.resultId = el.id;
-    if (className.includes('film')) {
-      this.getFilmActors();
+    if (className.includes('movie')) {
+      this.getMovieActors();
     } else if (className.includes('tv')) {
       this.getTVActors();
     }

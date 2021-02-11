@@ -17,7 +17,10 @@
       <header>
         <div class="logo">BOOLFLIX</div>
         <div class="search">
-          <input type="text" placeholder="Cerca un film..." v-model="searchInput" @keyup.enter="search">
+          <div class="search-input">
+            <i class="fa fa-search" aria-hidden="true"></i>
+            <input type="text" placeholder="Cerca un movie o una serie TV..." v-model="searchInput" @keyup.enter="search">
+          </div>
           <button @click="search">Cerca</button>
         </div>
       </header>
@@ -25,47 +28,47 @@
       <main>
 
         <div class="results-container">
-          <div class="title" v-if="arrayFilm.length > 0">film</div>
+          <div class="title" v-if="arrayMovie.length > 0">movie</div>
           <!-- *****FILM***** -->
-          <div class="film" v-for="(film, index) in arrayFilm">
-            <img class="result-image" :src="resultImg(film)" @mouseenter="showInfo('film-info', index, film)">
-            <div class="title-no-image"v-if="film.poster_path === null" >{{film.title}}</div>
-            <div class="result-info film-info" @mouseleave="hideInfo('film-info', index, film)">
+          <div class="movie" v-for="(movie, index) in arrayMovie">
+            <img class="result-image" :src="resultImg(movie)" @mouseenter="showInfo('movie-info', index, movie)">
+            <div class="title-no-image"v-if="movie.poster_path === null" >{{movie.title}}</div>
+            <div class="result-info movie-info" @mouseleave="hideInfo('movie-info', index, movie)">
               <div>
                 <span class="data-title">Titolo: </span>
-                <span class="data-text  film-title">{{film.title}}</span>
+                <span class="data-text  movie-title">{{movie.title}}</span>
               </div>
               <div>
                 <span class="data-title">Titolo originale: </span>
-                <span class="data-text">{{film.original_title}}</span>
+                <span class="data-text">{{movie.original_title}}</span>
               </div>
               <div>
                 <span class="data-title">Lingua originale: </span>
                 <span class="data-text">
-                  <span v-if="film.original_language === 'xx'">unknown</span>
-                  <div class="result-language"><img :src="getFlag(film)"></div>
+                  <span v-if="movie.original_language === 'xx'">unknown</span>
+                  <div class="result-language"><img :src="getFlag(movie)"></div>
                 </span>
               </div>
               <div>
                 <span class="data-title">Voto: </span>
                 <span class="data-text">
                   <!-- stelle piene -->
-                  <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(film)"></i>
+                  <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(movie)"></i>
                   <!-- stelle vuote -->
-                  <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5 -resultRating(film))"></i>
+                  <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5 -resultRating(movie))"></i>
                 </span>
               </div>
               <div>
                 <span class="data-title">Genere: </span>
-                <span class="data-text" v-for="genre in getGenre(film)">{{genre}}</span>
+                <span class="data-text" v-for="genre in getGenre(movie, movieGenres)">{{genre}}</span>
               </div>
               <div>
                 <span class="data-title">Attori: </span>
-                <span class="data-text">{{showFilmActors()}}</span>
+                <span class="data-text">{{showActors(movieActorsName)}}</span>
               </div>
               <div>
                 <span class="data-title">Overview: </span>
-                <span class="data-text">{{film.overview}}</span>
+                <span class="data-text">{{movie.overview}}</span>
               </div>
             </div>
           </div>
@@ -80,7 +83,7 @@
             <div class="result-info tv-info" @mouseleave="hideInfo('tv-info', index, tv)">
               <div>
                 <span class="data-title">Titolo: </span>
-                <span class="data-text  film-title">{{tv.name}}</span>
+                <span class="data-text  movie-title">{{tv.name}}</span>
               </div>
               <div>
                 <span class="data-title">Titolo originale: </span>
@@ -103,8 +106,12 @@
                 </span>
               </div>
               <div>
+                <span class="data-title">Genere: </span>
+                <span class="data-text" v-for="genre in getGenre(tv, TVGenres)">{{genre}}</span>
+              </div>
+              <div>
                 <span class="data-title">Attori: </span>
-                <span class="data-text">{{showTVActors()}}</span>
+                <span class="data-text">{{showActors(TVActorsName)}}</span>
               </div>
               <div>
                 <span class="data-title">Overview: </span>
