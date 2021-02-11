@@ -104,7 +104,7 @@ main {
 
 .movie, .tv {
   padding: 5px;
-  margin: 40px 10px 10px 10px;
+  margin: 40px 5px 5px 10px;
   border-radius: 5px;
   background: #2b2b2b;
   display: flex;
@@ -152,6 +152,7 @@ main {
 .data-title {
   font-weight: 700;
   font-size: 13px;
+  color: #f4f4f4;
 }
 
 .data-text {

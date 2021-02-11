@@ -28,7 +28,7 @@
       <main>
 
         <div class="results-container">
-          <div class="title" v-if="arrayMovie.length > 0">movie</div>
+          <div class="title" v-if="arrayMovie.length > 0">film</div>
           <!-- *****FILM***** -->
           <div class="movie" v-for="(movie, index) in arrayMovie">
             <img class="result-image" :src="resultImg(movie)" @mouseenter="showInfo('movie-info', index, movie)">
