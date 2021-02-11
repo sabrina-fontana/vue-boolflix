@@ -57,9 +57,8 @@
               </div>
               <div>
                 <span class="data-title">Actors: </span>
-                <span class="data-text" v-for="name in actorsName">{{name}} </span>
+                <span class="data-text">{{showFilmActors()}}</span>
               </div>
-
               <div>
                 <span class="data-title">Overview: </span>
                 <span class="data-text">{{film.overview}}</span>
@@ -98,6 +97,10 @@
                   <!-- stelle vuote -->
                   <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5- resultRating(tv))"></i>
                 </span>
+              </div>
+              <div>
+                <span class="data-title">Actors: </span>
+                <span class="data-text">{{showTVActors()}}</span>
               </div>
               <div>
                 <span class="data-title">Overview: </span>
