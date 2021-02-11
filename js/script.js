@@ -3,7 +3,9 @@ el: '#app',
 data: {
   searchInput: '',
   arrayFilm: [],
-  arrayTV: []
+  arrayTV: [],
+  resultId: 0,
+  actorsName: []
 },
 methods: {
   search: function() {
@@ -21,8 +23,13 @@ methods: {
     .then(function(resp) {
       that.arrayTV = resp.data.results;
     })
-
   },
+  // getActors: function() {
+  //   axios.get('https://api.themoviedb.org/3/movie/' + this.resultId + '/credits?api_key=a2092b04d9693f9c0da61a113dc5f29a')
+  //   .then(function(resp) {
+  //     that.arrayFilm = resp.data.results;
+  //   })
+  // }
   resultImg: function(el) {
     if (el.poster_path === null) {
       return 'placeholder.png'
@@ -64,11 +71,25 @@ methods: {
     }
     return 'https://www.countryflags.io/' + language + '/flat/24.png';
   },
-  showInfo: function(className, index) {
+  showInfo: function(className, index, el) {
     let info = document.getElementsByClassName(className)[index];
     info.classList.add('active');
+    this.resultId = el.id;
+    console.log(this.resultId)
+    let that = this;
+    axios.get('https://api.themoviedb.org/3/movie/' + this.resultId + '/credits?api_key=a2092b04d9693f9c0da61a113dc5f29a')
+    .then(function(resp) {
+      let actors = resp.data.cast;
+      let names = [];
+      actors.forEach((element) => {
+        names.push(element.name);
+      })
+      that.actorsName = names;
+      console.log(that.actorsName)
+    })
+
   },
-  hideInfo: function(className, index) {
+  hideInfo: function(className, index, el) {
     let info = document.getElementsByClassName(className)[index];
     info.classList.remove('active');
   }

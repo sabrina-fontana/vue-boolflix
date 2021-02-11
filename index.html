@@ -6,7 +6,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -29,8 +28,9 @@
           <div class="title" v-if="arrayFilm.length > 0">film</div>
           <!-- *****FILM***** -->
           <div class="film" v-for="(film, index) in arrayFilm">
-            <img class="result-image" :src="resultImg(film)" @mouseenter="showInfo('film-info', index)">
-            <div class="result-info film-info" @mouseleave="hideInfo('film-info', index)">
+            <img class="result-image" :src="resultImg(film)" @mouseenter="showInfo('film-info', index, film)">
+            <div class="title-no-image"v-if="film.poster_path === null" >{{film.title}}</div>
+            <div class="result-info film-info" @mouseleave="hideInfo('film-info', index, film)">
               <div>
                 <span class="data-title">Titolo: </span>
                 <span class="data-text  film-title">{{film.title}}</span>
@@ -53,9 +53,13 @@
                   <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(film)"></i>
                   <!-- stelle vuote -->
                   <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5 -resultRating(film))"></i>
-                  <span v-if="resultRating(film) === 0">0</span>
                 </span>
               </div>
+              <div>
+                <span class="data-title">Actors: </span>
+                <span class="data-text" v-for="name in actorsName">{{name}} </span>
+              </div>
+
               <div>
                 <span class="data-title">Overview: </span>
                 <span class="data-text">{{film.overview}}</span>
@@ -68,8 +72,9 @@
           <div class="title" v-if="arrayTV.length > 0">serie TV</div>
           <!-- *****SERIE TV***** -->
           <div class="tv" v-for="(tv, index) in arrayTV">
-            <img class="result-image" :src="resultImg(tv)" @mouseenter="showInfo('tv-info', index)">
-            <div class="result-info tv-info" @mouseleave="hideInfo('tv-info', index)">
+            <img class="result-image" :src="resultImg(tv)" @mouseenter="showInfo('tv-info', index, tv)">
+            <div class="title-no-image" v-if="tv.poster_path === null">{{tv.name}}</div>
+            <div class="result-info tv-info" @mouseleave="hideInfo('tv-info', index, tv)">
               <div>
                 <span class="data-title">Titolo: </span>
                 <span class="data-text  film-title">{{tv.name}}</span>
@@ -92,7 +97,6 @@
                   <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(tv)"></i>
                   <!-- stelle vuote -->
                   <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5- resultRating(tv))"></i>
-                  <span v-if="resultRating(tv) === 0">0</span>
                 </span>
               </div>
               <div>
