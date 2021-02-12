@@ -8,7 +8,9 @@ data: {
   movieGenres: [],
   TVGenres: [],
   movieActorsName: [],
-  TVActorsName: []
+  TVActorsName: [],
+  filmGenreSelected: '',
+  TVGenreSelected: ''
 },
 mounted() {
   let that = this;
@@ -104,7 +106,6 @@ methods: {
         names.push(element.name);
       })
       that.movieActorsName = names;
-      console.log('ciao')
     })
   },
   getTVActors: function() {
@@ -151,7 +152,7 @@ methods: {
   hideInfo: function(className, index, el) {
     let info = document.getElementsByClassName(className)[index];
     info.classList.remove('active');
-  }
+  },
   }
 });
 Vue.config.devtools = true;

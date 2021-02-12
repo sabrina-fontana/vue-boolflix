@@ -16,6 +16,17 @@
 
       <header>
         <div class="logo">BOOLFLIX</div>
+        <div class="select-container">
+          <select v-model="filmGenreSelected">
+            <option disabled value="">generi Film</option>
+            <option v-for="genre in movieGenres">{{genre.name}}</option>
+          </select>
+          <select v-model="TVGenreSelected">
+            <option disabled value="">generi serie TV</option>
+            <option v-for="genre in TVGenres">{{genre.name}}</option>
+          </select>
+        </div>
+
         <div class="search">
           <div class="search-input">
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -60,7 +71,7 @@
               </div>
               <div>
                 <span class="data-title">Genere: </span>
-                <span class="data-text" v-for="genre in getGenre(movie, movieGenres)">{{genre}}</span>
+                <span class="data-text">{{getGenre(movie, movieGenres)}}</span>
               </div>
               <div>
                 <span class="data-title">Attori: </span>
@@ -107,7 +118,7 @@
               </div>
               <div>
                 <span class="data-title">Genere: </span>
-                <span class="data-text" v-for="genre in getGenre(tv, TVGenres)">{{genre}}</span>
+                <span class="data-text">{{getGenre(tv, TVGenres)}}</span>
               </div>
               <div>
                 <span class="data-title">Attori: </span>
