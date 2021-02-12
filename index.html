@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <link href="img/favicon.ico">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap" rel="stylesheet">
@@ -15,9 +16,9 @@
     <div id="app">
 
       <header>
-        <div class="logo">BOOLFLIX</div>
+        <img class="logo" src="img/logo-img.png" alt="">
         <div class="select-container">
-          <select v-model="filmGenreSelected" @change="filterMovie()">
+          <select v-model="movieGenreSelected" @change="filterMovie()">
             <option :value="0">generi Film</option>
             <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
           </select>
@@ -32,7 +33,7 @@
             <i class="fa fa-search" aria-hidden="true"></i>
             <input type="text" placeholder="Cerca un film o una serie TV..." v-model="searchInput" @keyup.enter="search">
           </div>
-          <button @click="search">Cerca</button>
+          <button @click="search; showInput">Cerca</button>
         </div>
       </header>
 
@@ -40,7 +41,8 @@
 
         <div class="results-container">
           <div class="title" v-if="arrayMovie.length > 0">film</div>
-          <div v-if="arrayMovie.length === 0 && filmGenreSelected !== 0">nessun risultato in film</div>
+
+          <div class="no-results" v-if="noResults(arrayMovie, movieGenreSelected)">nessun risultato in film</div>
           <!-- *****FILM***** -->
           <div class="movie" v-for="(movie, index) in arrayMovie">
             <img class="result-image" :src="resultImg(movie)" @mouseenter="showInfo('movie-info', index, movie)">
@@ -88,7 +90,7 @@
 
         <div class="results-container">
           <div class="title" v-if="arrayTV.length > 0">serie TV</div>
-          <div v-if="arrayTV.length === 0 && TVGenreSelected !== 0">nessun risultato in serie TV</div>
+          <div class="no-results" v-if="noResults(arrayTV, TVGenreSelected)">nessun risultato in serie TV</div>
           <!-- *****SERIE TV***** -->
           <div class="tv" v-for="(tv, index) in arrayTV">
             <img class="result-image" :src="resultImg(tv)" @mouseenter="showInfo('tv-info', index, tv)">
