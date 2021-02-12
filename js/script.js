@@ -28,17 +28,18 @@ mounted() {
 methods: {
   search: async function() {
     if (this.searchInput === '' && this.movieGenreSelected === 0) {
-      return this.arrayMovie = [];
+      this.arrayMovie = [];
     }
     if (this.searchInput === '' && this.TVGenreSelected === 0) {
-      return this.arrayTV = [];
+      this.arrayTV = [];
     }
     await this.searchMovie();
     await this.searchTV();
     if (this.movieGenreSelected !== 0) {
-      return this.filterMovie()
-    } else if (this.TVGenreSelected !== 0) {
-      return this.filterTV()
+      this.filterMovie()
+    }
+    if (this.TVGenreSelected !== 0) {
+      this.filterTV()
     }
   },
   searchMovie: function() {
@@ -141,7 +142,6 @@ methods: {
     if (this.searchInput.length === 0) {
       this.arrayMovie = [];
       let that = this;
-      console.log(this.movieGenreSelected)
       return axios.get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
       .then(function(resp) {
         return that.arrayMovie = resp.data.results;
