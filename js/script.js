@@ -9,8 +9,8 @@ data: {
   TVGenres: [],
   movieActorsName: [],
   TVActorsName: [],
-  filmGenreSelected: '',
-  TVGenreSelected: ''
+  filmGenreSelected: 0,
+  TVGenreSelected: 0
 },
 mounted() {
   let that = this;
@@ -33,23 +33,23 @@ methods: {
     this.searchMovie();
     this.searchTV();
   },
-  searchMovie: function() {
+  searchMovie: async function() {
     this.arrayMovie = [];
     let that = this;
     // chiamata per film (5 pagine)
     for (var x = 1; x <= 5; x++) {
-      axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + x + '&query=' + this.searchInput)
+      await axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + 1 + '&query=' + this.searchInput)
       .then(function(resp) {
         that.arrayMovie = [...that.arrayMovie, ...resp.data.results];
       })
     }
   },
-  searchTV: function() {
+  searchTV: async function() {
     this.arrayTV = [];
     let that = this;
     // chiamata per serie tv (5 pagine)
     for (var x = 1; x <= 5; x++) {
-      axios.get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + x + '&query=' + this.searchInput)
+      await axios.get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + x + '&query=' + this.searchInput)
       .then(function(resp) {
         that.arrayTV = [...that.arrayTV, ...resp.data.results];
       })
@@ -67,33 +67,15 @@ methods: {
   },
   getFlag: function(el) {
     let language = el.original_language;
-    if (language === 'en') {
-      language = 'gb'
-    }
-    if (language === 'da') {
-      language = 'dk'
-    }
-    if (language === 'el') {
-      language = 'gr'
-    }
-    if (language === 'ja') {
-      language = 'jp'
-    }
-    if (language === 'cs') {
-      language = 'cz'
-    }
-    if (language === 'ur') {
-      language = 'pk'
-    }
-    if (language === 'zh') {
-      language = 'cn'
-    }
-    if (language === 'ko') {
-      language = 'kr'
-    }
-    if (language === 'xx') {
-      return '';
-    }
+    if (language === 'en') language = 'gb';
+    if (language === 'da') language = 'dk';
+    if (language === 'el') language = 'gr';
+    if (language === 'ja') language = 'jp';
+    if (language === 'cs') language = 'cz';
+    if (language === 'ur') language = 'pk';
+    if (language === 'zh') language = 'cn';
+    if (language === 'ko') language = 'kr';
+    if (language === 'xx') return '';
     return 'https://www.countryflags.io/' + language + '/flat/24.png';
   },
   getMovieActors: function() {
@@ -153,6 +135,34 @@ methods: {
     let info = document.getElementsByClassName(className)[index];
     info.classList.remove('active');
   },
+  filterMovie: async function() {
+    await this.searchMovie();
+    let filteredMovies = [];
+      if (this.filmGenreSelected  === 0) {
+        return this.arrayMovie
+      } else {
+        filteredMovies = this.arrayMovie.filter((element) => {
+          if (element.genre_ids.includes(this.filmGenreSelected)) {
+            return element;
+          }
+        })
+        return this.arrayMovie = filteredMovies
+      }
+  },
+  filterTV: async function() {
+    await this.searchTV();
+    let filteredTV = [];
+      if (this.TVGenreSelected  === 0) {
+        return this.arrayTV
+      } else {
+        filteredTV = this.arrayTV.filter((element) => {
+          if (element.genre_ids.includes(this.TVGenreSelected)) {
+            return element;
+          }
+        })
+        return this.arrayTV = filteredTV
+      }
+  }
   }
 });
 Vue.config.devtools = true;

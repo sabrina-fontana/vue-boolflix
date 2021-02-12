@@ -17,13 +17,13 @@
       <header>
         <div class="logo">BOOLFLIX</div>
         <div class="select-container">
-          <select v-model="filmGenreSelected">
-            <option disabled value="">generi Film</option>
-            <option v-for="genre in movieGenres">{{genre.name}}</option>
+          <select v-model="filmGenreSelected" @change="filterMovie()">
+            <option :value="0">generi Film</option>
+            <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
           </select>
-          <select v-model="TVGenreSelected">
-            <option disabled value="">generi serie TV</option>
-            <option v-for="genre in TVGenres">{{genre.name}}</option>
+          <select v-model="TVGenreSelected" @change="filterTV()">
+            <option :value="0">generi serie TV</option>
+            <option v-for="genre in TVGenres" :value="genre.id">{{genre.name}}</option>
           </select>
         </div>
 
