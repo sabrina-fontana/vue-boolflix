@@ -40,6 +40,7 @@
 
         <div class="results-container">
           <div class="title" v-if="arrayMovie.length > 0">film</div>
+          <div v-if="arrayMovie.length === 0 && filmGenreSelected !== 0">nessun risultato in film</div>
           <!-- *****FILM***** -->
           <div class="movie" v-for="(movie, index) in arrayMovie">
             <img class="result-image" :src="resultImg(movie)" @mouseenter="showInfo('movie-info', index, movie)">
@@ -87,6 +88,7 @@
 
         <div class="results-container">
           <div class="title" v-if="arrayTV.length > 0">serie TV</div>
+          <div v-if="arrayTV.length === 0 && TVGenreSelected !== 0">nessun risultato in serie TV</div>
           <!-- *****SERIE TV***** -->
           <div class="tv" v-for="(tv, index) in arrayTV">
             <img class="result-image" :src="resultImg(tv)" @mouseenter="showInfo('tv-info', index, tv)">

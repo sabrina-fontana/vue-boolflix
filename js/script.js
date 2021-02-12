@@ -33,23 +33,23 @@ methods: {
     this.searchMovie();
     this.searchTV();
   },
-  searchMovie: async function() {
+  searchMovie: function() {
     this.arrayMovie = [];
     let that = this;
     // chiamata per film (5 pagine)
     for (var x = 1; x <= 5; x++) {
-      await axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + 1 + '&query=' + this.searchInput)
+      return axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + 1 + '&query=' + this.searchInput)
       .then(function(resp) {
         that.arrayMovie = [...that.arrayMovie, ...resp.data.results];
       })
     }
   },
-  searchTV: async function() {
+  searchTV: function() {
     this.arrayTV = [];
     let that = this;
     // chiamata per serie tv (5 pagine)
     for (var x = 1; x <= 5; x++) {
-      await axios.get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + x + '&query=' + this.searchInput)
+      return axios.get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + x + '&query=' + this.searchInput)
       .then(function(resp) {
         that.arrayTV = [...that.arrayTV, ...resp.data.results];
       })
