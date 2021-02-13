@@ -26,20 +26,31 @@ mounted() {
   })
 },
 methods: {
+  // DIVERSI CASI:
+  // 1 - input di ricerca vuoto E nessun genere selezionato
+  // 2 - input popolato E nessun genere selezionato
+  // 3 - input vuoto E un genere selezionato
+  // 4 - input popolato E un genere selezionato
   search: async function() {
+    // !!!search non rileva i generi perché sono legati all'evento onchange della select ---> quando la select cambia ricontrollo se l'input è popolato o meno
+    // CASO 1 - ritorna l'array vuoto
     if (this.searchInput === '' && this.movieGenreSelected === 0) {
       this.arrayMovie = [];
     }
     if (this.searchInput === '' && this.TVGenreSelected === 0) {
       this.arrayTV = [];
     }
-    await this.searchMovie();
-    await this.searchTV();
-    if (this.movieGenreSelected !== 0) {
-      this.filterMovie()
-    }
-    if (this.TVGenreSelected !== 0) {
-      this.filterTV()
+    // CASO 2 - rifai la chiamata all'API
+    else {
+      await this.searchMovie();
+      await this.searchTV();
+
+      if (this.movieGenreSelected !== 0) {
+        this.filterMovie()
+      }
+      if (this.TVGenreSelected !== 0) {
+        this.filterTV()
+      }
     }
   },
   searchMovie: function() {
@@ -48,10 +59,9 @@ methods: {
     if (this.searchInput.length > 0) {
       return axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + 1 + '&query=' + this.searchInput)
       .then(function(resp) {
-        that.arrayMovie = resp.data.results;
+        return that.arrayMovie = resp.data.results;
       })
     }
-    return this.filterMovie()
   },
   searchTV: function() {
     this.arrayTV = [];
@@ -59,10 +69,58 @@ methods: {
     if (this.searchInput.length > 0) {
       return axios.get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + 1 + '&query=' + this.searchInput)
       .then(function(resp) {
-        that.arrayTV = resp.data.results;
+        return that.arrayTV = resp.data.results;
       })
     }
-    return this.filterTV();
+  },
+  filterMovie: async function() {
+    // CASO 3 - ritorna i risultati più famosi per il genere selezionato
+    if (this.searchInput.length === 0) {
+      this.arrayMovie = [];
+      let that = this;
+      return axios.get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
+      .then(function(resp) {
+        return that.arrayMovie = resp.data.results;
+      })
+    }
+    // CASO 4 - rifai la chiamata all'API e filtra i risultati per genere
+    await this.searchMovie();
+    let filteredMovies = [];
+      if (this.movieGenreSelected === 0) {
+        return this.arrayMovie
+      } else {
+        filteredMovies = this.arrayMovie.filter((element) => {
+          if (element.genre_ids.includes(this.movieGenreSelected)) {
+            return element;
+          }
+        })
+        return this.arrayMovie = filteredMovies
+      }
+  },
+  filterTV: async function() {
+    if (this.searchInput.length === 0) {
+      this.arrayTV = [];
+      let that = this;
+      return axios.get('https://api.themoviedb.org/3/discover/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.TVGenreSelected)
+      .then(function(resp) {
+        return that.arrayTV = resp.data.results;
+      })
+    }
+    await this.searchTV();
+    let filteredTV = [];
+      if (this.TVGenreSelected === 0) {
+        return this.arrayTV
+      } else {
+        filteredTV = this.arrayTV.filter((element) => {
+          if (element.genre_ids.includes(this.TVGenreSelected)) {
+            return element;
+          }
+        })
+        return this.arrayTV = filteredTV
+      }
+  },
+  noResults: function(array, typeGenre) {
+    return array.length === 0 && typeGenre !== 0;
   },
   resultImg: function(el) {
     if (el.poster_path === null) {
@@ -137,53 +195,6 @@ methods: {
   hideInfo: function(className, index, el) {
     let info = document.getElementsByClassName(className)[index];
     info.classList.remove('active');
-  },
-  filterMovie: async function() {
-    if (this.searchInput.length === 0) {
-      this.arrayMovie = [];
-      let that = this;
-      return axios.get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
-      .then(function(resp) {
-        return that.arrayMovie = resp.data.results;
-      })
-    }
-    await this.searchMovie();
-    let filteredMovies = [];
-      if (this.movieGenreSelected  === 0) {
-        return this.arrayMovie
-      } else {
-        filteredMovies = this.arrayMovie.filter((element) => {
-          if (element.genre_ids.includes(this.movieGenreSelected)) {
-            return element;
-          }
-        })
-        return this.arrayMovie = filteredMovies
-      }
-  },
-  filterTV: async function() {
-    if (this.searchInput.length === 0) {
-      this.arrayTV = [];
-      let that = this;
-      return axios.get('https://api.themoviedb.org/3/discover/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.TVGenreSelected)
-      .then(function(resp) {
-        return that.arrayTV = resp.data.results;
-      })
-    }
-    await this.searchTV();
-    let filteredTV = [];
-      if (this.TVGenreSelected === 0) {
-        return this.arrayTV
-      } else {
-        filteredTV = this.arrayTV.filter((element) => {
-          if (element.genre_ids.includes(this.TVGenreSelected)) {
-            return element;
-          }
-        })
-        return this.arrayTV = filteredTV
-      }
-  },
-  noResults: function(array, typeGenre) {
-    return array.length === 0 && typeGenre !== 0;
   }
   }
 });
