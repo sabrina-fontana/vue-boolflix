@@ -39,9 +39,6 @@
         </div>
 
         <div class="results-container">
-
-          <div class="no-results" v-if="noResults(arrayMovie, movieGenreSelected)">nessun risultato in film</div>
-
           <!-- **********FILM********** -->
           <div class="movie" v-for="(movie, index) in arrayMovie">
 
@@ -107,7 +104,6 @@
         </div>
 
         <div class="results-container">
-          <div class="no-results" v-if="noResults(arrayTV, TVGenreSelected)">nessun risultato in serie TV</div>
           <!-- **********SERIE TV********** -->
           <div class="tv" v-for="(tv, index) in arrayTV">
 

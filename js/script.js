@@ -52,6 +52,9 @@ methods: {
       })
     .then(function(resp) {
       that.arrayMovie = resp.data.results;
+    })
+    .catch(error => {
+    alert('Ops. Qualcosa è andato storto. Riprova più tardi')
     });
   },
   popularTV: function() {
@@ -74,7 +77,7 @@ methods: {
     if (this.searchInput !== '') {
       await this.searchMovie();
       await this.searchTV();
-    } else {
+    } else if (this.searchInput === '') {
       // se l'input è vuoto...
       this.movieTitle = 'Film';
       this.TVTitle = 'Serie TV';
@@ -84,8 +87,18 @@ methods: {
         .then(function(resp) {
           return that.arrayMovie = resp.data.results;
         })
+      } else if (this.movieGenreSelected === 0) {
+        return this.popularMovies();
       }
-      return this.popularMovies()
+      if (this.TVGenreSelected !== 0) {
+        let that = this;
+        return axios.get('https://api.themoviedb.org/3/discover/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.TVGenreSelected)
+        .then(function(resp) {
+          return that.arrayTV = resp.data.results;
+        })
+      } else if (this.TVGenreSelected === 0) {
+        return this.popularTV();
+      }
     }
   },
   searchMovie: async function() {
@@ -123,24 +136,35 @@ methods: {
     }
   },
   filterMovie: async function() {
+    if (this.searchInput === '') {
+      let that = this;
+      return axios.get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
+      .then(function(resp) {
+        return that.arrayMovie = resp.data.results;
+      })
+    }
      let filteredMovies = this.arrayMovie.filter((element) => {
-       if (element.genre_ids.includes(this.movieGenreSelected)) {
+       if (element.genre_ids.includes(this.movieGenreSelected) || this.movieGenreSelected === 0) {
          return element;
        }
      })
      return this.arrayMovie = filteredMovies;
    },
   filterTV: async function() {
+    if (this.searchInput === '') {
+      let that = this;
+      return axios.get('https://api.themoviedb.org/3/discover/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.TVGenreSelected)
+      .then(function(resp) {
+        return that.arrayTV = resp.data.results;
+      })
+    }
     let filteredTV = this.arrayTV.filter((element) => {
-      if (element.genre_ids.includes(this.TVGenreSelected)) {
+      if (element.genre_ids.includes(this.TVGenreSelected) || this.TVGenreSelected === 0) {
         return element;
       }
     })
     return this.arrayTV = filteredTV;
  },
-  noResults: function(array, typeGenre) {
-    return array.length === 0 && typeGenre !== 0;
-  },
   resultImg: function(el) {
     if (el.poster_path === null) {
       return 'img/placeholder.png'
