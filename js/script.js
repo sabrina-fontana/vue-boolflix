@@ -3,8 +3,8 @@ el: '#app',
 data: {
   apiKey: 'a2092b04d9693f9c0da61a113dc5f29a',
   searchInput: '',
-  movieTitle: 'I film più visti',
-  TVTitle: 'Le serie TV più viste',
+  movieTitle: '',
+  TVTitle: '',
   arrayMovie: [],
   arrayTV: [],
   resultId: 0,
@@ -17,19 +17,7 @@ data: {
 },
 mounted() {
   let that = this;
-  // film più popolari
   axios.all([
-    axios.get('https://api.themoviedb.org/3/movie/popular', {
-      params: {
-        api_key: this.apiKey
-       }
-    }),
-    // serie TV più popolari
-    axios.get('https://api.themoviedb.org/3/tv/popular', {
-      params: {
-        api_key: this.apiKey
-       }
-    }),
     // generi film
     axios.get('https://api.themoviedb.org/3/genre/movie/list', {
       params: {
@@ -43,122 +31,112 @@ mounted() {
       }
     })
   ]).then(axios.spread((...resp) => {
-    that.arrayMovie = resp[0].data.results;
-    that.arrayTV = resp[1].data.results;
-    that.movieGenres = resp[2].data.genres;
-    that.TVGenres = resp[3].data.genres;
+    that.movieGenres = resp[0].data.genres;
+    that.TVGenres = resp[1].data.genres;
   }));
+  this.popularMovies();
+  this.popularTV();
 },
 methods: {
   showSearch: function() {
     let input = document.getElementsByTagName('input')[0];
     input.classList.toggle('active');
   },
-  // DIVERSI CASI:
-  // 1 - input di ricerca vuoto E nessun genere selezionato
-  // 2 - input popolato E nessun genere selezionato
-  // 3 - input vuoto E un genere selezionato
-  // 4 - input popolato E un genere selezionato
+  popularMovies: function() {
+    this.movieTitle = 'I film più visti';
+    let that = this;
+    axios.get('https://api.themoviedb.org/3/movie/popular', {
+        params: {
+          api_key: this.apiKey
+         }
+      })
+    .then(function(resp) {
+      that.arrayMovie = resp.data.results;
+    });
+  },
+  popularTV: function() {
+    this.TVTitle = 'Le serie TV più viste';
+    let that = this;
+    axios.get('https://api.themoviedb.org/3/tv/popular', {
+      params: {
+        api_key: this.apiKey
+       }
+    })
+    .then(function(resp) {
+      that.arrayTV = resp.data.results;
+    });
+  },
   search: async function() {
-    // !!!search non rileva i generi perché sono legati all'evento onchange della select ---> quando la select cambia ricontrollo se l'input è popolato o meno
-    // CASO 1 - ritorna l'array vuoto
-    if (this.searchInput === '' && this.movieGenreSelected === 0) {
-      this.arrayMovie = [];
+    if (this.searchInput === '' && this.movieGenreSelected === 0 && this.TVGenreSelected === 0) {
+      await this.popularMovies();
+      await this.popularTV();
     }
-    if (this.searchInput === '' && this.TVGenreSelected === 0) {
-      this.arrayTV = [];
-    }
-    // CASO 2 - rifai la chiamata all'API
-    else {
+    if (this.searchInput !== '') {
       await this.searchMovie();
       await this.searchTV();
-
+    } else {
+      // se l'input è vuoto...
+      this.movieTitle = 'Film';
+      this.TVTitle = 'Serie TV';
       if (this.movieGenreSelected !== 0) {
-        this.filterMovie()
+        let that = this;
+        return axios.get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
+        .then(function(resp) {
+          return that.arrayMovie = resp.data.results;
+        })
       }
-      if (this.TVGenreSelected !== 0) {
-        this.filterTV()
-      }
+      return this.popularMovies()
     }
   },
-  searchMovie: function() {
-    this.arrayMovie = [];
+  searchMovie: async function() {
     let that = this;
-    if (this.searchInput.length > 0) {
-      return axios
-      .get('https://api.themoviedb.org/3/search/movie', {
-        params: {
-          api_key: this.apiKey,
-          query: this.searchInput
-        }
-      })
-      .then(function(resp) {
-        that.movieTitle = 'Film'
-        return that.arrayMovie = resp.data.results;
-      })
+    await axios
+    .get('https://api.themoviedb.org/3/search/movie', {
+      params: {
+        api_key: this.apiKey,
+        query: this.searchInput
+      }
+    })
+    .then(function(resp) {
+      that.movieTitle = `FILM risultati per: ${that.searchInput}`;
+      return that.arrayMovie = resp.data.results;
+    })
+    if (this.movieGenreSelected !== 0) {
+      this.filterMovie();
     }
   },
-  searchTV: function() {
-    this.arrayTV = [];
+  searchTV: async function() {
     let that = this;
-    if (this.searchInput.length > 0) {
-      return axios
-      .get('https://api.themoviedb.org/3/search/tv', {
-        params: {
-          api_key: this.apiKey,
-          query: this.searchInput
-        }
-      })
-      .then(function(resp) {
-        return that.arrayTV = resp.data.results;
-      })
+    await axios
+    .get('https://api.themoviedb.org/3/search/tv', {
+      params: {
+        api_key: this.apiKey,
+        query: this.searchInput
+      }
+    })
+    .then(function(resp) {
+      that.TVTitle = `SERIE TV risultati per: ${that.searchInput}`;
+      return that.arrayTV = resp.data.results;
+    })
+    if (this.TVGenreSelected !== 0) {
+      this.filterTV();
     }
   },
   filterMovie: async function() {
-     // CASO 3 - ritorna i risultati più famosi per il genere selezionato
-     if (this.searchInput.length === 0) {
-       this.arrayMovie = [];
-       let that = this;
-       return axios.get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
-       .then(function(resp) {
-         return that.arrayMovie = resp.data.results;
-       })
-     }
-     // CASO 4 - rifai la chiamata all'API e filtra i risultati per genere
-     await this.searchMovie();
-     let filteredMovies = [];
-       if (this.movieGenreSelected === 0) {
-         return this.arrayMovie
-       } else {
-         filteredMovies = this.arrayMovie.filter((element) => {
-           if (element.genre_ids.includes(this.movieGenreSelected)) {
-             return element;
-           }
-         })
-         return this.arrayMovie = filteredMovies
+     let filteredMovies = this.arrayMovie.filter((element) => {
+       if (element.genre_ids.includes(this.movieGenreSelected)) {
+         return element;
        }
+     })
+     return this.arrayMovie = filteredMovies;
    },
   filterTV: async function() {
-   if (this.searchInput.length === 0) {
-     this.arrayTV = [];
-     let that = this;
-     return axios.get('https://api.themoviedb.org/3/discover/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.TVGenreSelected)
-     .then(function(resp) {
-       return that.arrayTV = resp.data.results;
-     })
-   }
-   await this.searchTV();
-   let filteredTV = [];
-     if (this.TVGenreSelected === 0) {
-       return this.arrayTV
-     } else {
-       filteredTV = this.arrayTV.filter((element) => {
-         if (element.genre_ids.includes(this.TVGenreSelected)) {
-           return element;
-         }
-       })
-       return this.arrayTV = filteredTV
-     }
+    let filteredTV = this.arrayTV.filter((element) => {
+      if (element.genre_ids.includes(this.TVGenreSelected)) {
+        return element;
+      }
+    })
+    return this.arrayTV = filteredTV;
  },
   noResults: function(array, typeGenre) {
     return array.length === 0 && typeGenre !== 0;

@@ -19,34 +19,24 @@
       <header>
 
         <img class="logo" src="img/logo-img.png" alt="">
+        <div>Home</div>
+        <div>Serie TV</div>
+        <div>Film</div>
 
-        <div class="search">
-
-          <div class="input-container">
-            <div class="search-input">
-              <i class="fa fa-search" aria-hidden="true" @click="showSearch"></i>
-              <input type="text" placeholder="Cerca un film o una serie TV..." v-model="searchInput" @keyup.enter="search">
-            </div>
-          </div>
-          <div class="select-container">
-            <select v-model="movieGenreSelected" @change="filterMovie()">
-              <option :value="0">generi Film</option>
-              <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
-            </select>
-            <select v-model="TVGenreSelected" @change="filterTV()">
-              <option :value="0">generi serie TV</option>
-              <option v-for="genre in TVGenres" :value="genre.id">{{genre.name}}</option>
-            </select>
-          </div>
-
-        </div>
+        <div class="icon" @click="showSearch"><i class="fa fa-search" aria-hidden="true"></i></div>
+        <input type="text" placeholder="Cerca un film o una serie TV..." v-model="searchInput" @keyup.enter="search">
 
       </header>
 
       <main>
 
         <!-- risultati per film -->
-        <div class="title">{{movieTitle}}</div>
+        <div class="title">{{movieTitle}}
+          <select v-model="movieGenreSelected" @change="filterMovie()">
+            <option :value="0">tutti i generi</option>
+            <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
+          </select>
+        </div>
 
         <div class="results-container">
 
@@ -109,7 +99,12 @@
         </div>
 
         <!-- risultati per serie TV -->
-        <div class="title">{{TVTitle}}</div>
+        <div class="title">{{TVTitle}}
+          <select v-model="TVGenreSelected" @change="filterTV()">
+            <option :value="0">tutti i generi</option>
+            <option v-for="genre in TVGenres" :value="genre.id">{{genre.name}}</option>
+          </select>
+        </div>
 
         <div class="results-container">
           <div class="no-results" v-if="noResults(arrayTV, TVGenreSelected)">nessun risultato in serie TV</div>
