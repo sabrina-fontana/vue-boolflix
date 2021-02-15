@@ -20,28 +20,24 @@
 
         <img class="logo" src="img/logo-img.png" alt="">
 
-        <div class="select-container">
-
-          <select v-model="movieGenreSelected" @change="filterMovie()">
-            <option :value="0">generi Film</option>
-            <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
-          </select>
-
-          <select v-model="TVGenreSelected" @change="filterTV()">
-            <option :value="0">generi serie TV</option>
-            <option v-for="genre in TVGenres" :value="genre.id">{{genre.name}}</option>
-          </select>
-
-        </div>
-
         <div class="search">
 
-          <div class="search-input">
-            <i class="fa fa-search" aria-hidden="true"></i>
-            <input type="text" placeholder="Cerca un film o una serie TV..." v-model="searchInput" @keyup.enter="search">
+          <div class="input-container">
+            <div class="search-input">
+              <i class="fa fa-search" aria-hidden="true" @click="showSearch"></i>
+              <input type="text" placeholder="Cerca un film o una serie TV..." v-model="searchInput" @keyup.enter="search">
+            </div>
           </div>
-
-          <button @click="search; showInput">Cerca</button>
+          <div class="select-container">
+            <select v-model="movieGenreSelected" @change="filterMovie()">
+              <option :value="0">generi Film</option>
+              <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
+            </select>
+            <select v-model="TVGenreSelected" @change="filterTV()">
+              <option :value="0">generi serie TV</option>
+              <option v-for="genre in TVGenres" :value="genre.id">{{genre.name}}</option>
+            </select>
+          </div>
 
         </div>
 
@@ -50,7 +46,7 @@
       <main>
 
         <!-- risultati per film -->
-        <div class="title" v-if="arrayMovie.length > 0">film</div>
+        <div class="title">{{movieTitle}}</div>
 
         <div class="results-container">
 
@@ -113,8 +109,8 @@
         </div>
 
         <!-- risultati per serie TV -->
-        <div class="title" v-if="arrayTV.length > 0">serie TV</div>
-        
+        <div class="title">{{TVTitle}}</div>
+
         <div class="results-container">
           <div class="no-results" v-if="noResults(arrayTV, TVGenreSelected)">nessun risultato in serie TV</div>
           <!-- **********SERIE TV********** -->

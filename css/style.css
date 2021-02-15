@@ -12,12 +12,6 @@
   color: #a3a3a3;
 }
 
-/* Works on Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #2b2b2b;
-}
-
 * ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -43,28 +37,25 @@ header {
   width: 200px;
 }
 
-.search {
+.search, .input-container, .select-container {
   display: flex;
 }
 
-.search input {
-  width: 300px;
-}
-
-.search button {
+.search-input i {
+  font-size: 24px;
   cursor: pointer;
-  font-weight: 600;
 }
 
-.search button:hover {
-  transform: scale(1.1);
+input.active {
+  display: flex;
 }
 
-.search > * {
-  margin: 10px;
+input {
+  width: 300px;
+  display: none;
 }
 
-.search * {
+.input-container * {
   padding: 5px 10px;
   font-size: 18px;
   border: none;
@@ -74,28 +65,39 @@ header {
   color: white;
 }
 
+.search-input {
+  display: flex;
+  align-items: center;
+}
+
+.select-container {
+  background: none;
+}
+
+.select-container > *, .input-container > * {
+  margin: 0 5px;
+}
+
+select {
+  width: 160px;
+  border-radius: 8px;
+  background: #2b2b2b;
+  color: #cecece;
+  font-size: 16px;
+  padding-left: 5px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
 main {
   display: flex;
   flex-direction: column;
-  /* max-width: 1400px; */
   margin: 0 auto;
 }
 
 .icon {
   font-size: 50px;
-}
-
-select {
-  width: 180px;
-  border-radius: 8px;
-  background: #2b2b2b;
-  color: #cecece;
-  font-size: 16px;
-  padding: 8px;
-  margin: 0 5px;
-  border: none;
-  outline: none;
-  cursor: pointer;
 }
 
 .results-container {
@@ -121,7 +123,7 @@ select {
 }
 
 .movie, .tv {
-  margin: 3px;
+  margin: 0 2px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -163,12 +165,12 @@ select {
   box-shadow: rgba(255, 255, 255, 0.5) 0px 0px 4px 0px, rgba(255, 255, 255, 0.5) 0px 2px 4px 0px;
 }
 
-.result-info::-webkit-scrollbar {
-  width: 5px;
+.result-info.active {
+  display: block;
 }
 
-.active {
-  display: block;
+.result-info::-webkit-scrollbar {
+  width: 5px;
 }
 
 .data-title {
