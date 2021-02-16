@@ -70,101 +70,98 @@ methods: {
     });
   },
   search: async function() {
-    if (this.searchInput === '' && this.movieGenreSelected === 0 && this.TVGenreSelected === 0) {
-      await this.popularMovies();
-      await this.popularTV();
+    // DIVERSI CASI:
+  // 1 - input di ricerca vuoto E nessun genere selezionato
+  // 2 - input popolato E nessun genere selezionato
+  // 3 - input vuoto E un genere selezionato
+  // 4 - input popolato E un genere selezionato
+    // !!!search non rileva i generi perché sono legati all'evento onchange della select ---> quando la select cambia ricontrollo se l'input è popolato o meno
+    // CASO 1 - ritorna l'array vuoto
+    if (this.searchInput === '' && this.movieGenreSelected === 0) {
+      return this.popularMovies();
     }
-    if (this.searchInput !== '') {
-      await this.searchMovie();
-      await this.searchTV();
-    } else if (this.searchInput === '') {
-      // se l'input è vuoto...
-      this.movieTitle = 'Film';
-      this.TVTitle = 'Serie TV';
-      if (this.movieGenreSelected !== 0) {
-        let that = this;
-        return axios.get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
-        .then(function(resp) {
-          return that.arrayMovie = resp.data.results;
-        })
-      } else if (this.movieGenreSelected === 0) {
-        return this.popularMovies();
-      }
-      if (this.TVGenreSelected !== 0) {
-        let that = this;
-        return axios.get('https://api.themoviedb.org/3/discover/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.TVGenreSelected)
-        .then(function(resp) {
-          return that.arrayTV = resp.data.results;
-        })
-      } else if (this.TVGenreSelected === 0) {
-        return this.popularTV();
-      }
+    if (this.searchInput === '' && this.TVGenreSelected === 0) {
+      return this.popularTV();
+    }
+    // CASO 2 - rifai la chiamata all'API
+    await this.searchMovie();
+    await this.searchTV();
+    this.movieTitle = 'Film';
+    this.TVTitle = 'Serie TV';
+
+    if (this.movieGenreSelected !== 0) {
+      return this.filterMovie()
+    }
+    if (this.TVGenreSelected !== 0) {
+      return this.filterTV()
     }
   },
-  searchMovie: async function() {
+  searchMovie: function() {
     let that = this;
-    await axios
-    .get('https://api.themoviedb.org/3/search/movie', {
-      params: {
-        api_key: this.apiKey,
-        query: this.searchInput
-      }
-    })
-    .then(function(resp) {
-      that.movieTitle = `FILM risultati per: ${that.searchInput}`;
-      return that.arrayMovie = resp.data.results;
-    })
-    if (this.movieGenreSelected !== 0) {
-      this.filterMovie();
+    if (this.searchInput.length > 0) {
+      return axios.get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + 1 + '&query=' + this.searchInput)
+      .then(function(resp) {
+        that.movieTitle = `FILM risultati per: ${that.searchInput}`;
+        return that.arrayMovie = resp.data.results;
+      })
     }
   },
   searchTV: async function() {
     let that = this;
-    await axios
-    .get('https://api.themoviedb.org/3/search/tv', {
-      params: {
-        api_key: this.apiKey,
-        query: this.searchInput
-      }
-    })
-    .then(function(resp) {
-      that.TVTitle = `SERIE TV risultati per: ${that.searchInput}`;
-      return that.arrayTV = resp.data.results;
-    })
-    if (this.TVGenreSelected !== 0) {
-      this.filterTV();
+    if (this.searchInput.length > 0) {
+      return axios.get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=' + 1 + '&query=' + this.searchInput)
+      .then(function(resp) {
+        that.TVTitle = `SERIE TV risultati per: ${that.searchInput}`;
+        return that.arrayTV = resp.data.results;
+      })
     }
   },
   filterMovie: async function() {
-    if (this.searchInput === '') {
+    // CASO 3 - ritorna i risultati più famosi per il genere selezionato
+    if (this.searchInput.length === 0) {
+      this.arrayMovie = [];
       let that = this;
       return axios.get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
       .then(function(resp) {
         return that.arrayMovie = resp.data.results;
       })
     }
-     let filteredMovies = this.arrayMovie.filter((element) => {
-       if (element.genre_ids.includes(this.movieGenreSelected) || this.movieGenreSelected === 0) {
-         return element;
-       }
-     })
-     return this.arrayMovie = filteredMovies;
-   },
+    // CASO 4 - rifai la chiamata all'API e filtra i risultati per genere
+    await this.searchMovie();
+    let filteredMovies = [];
+      if (this.movieGenreSelected === 0) {
+        return this.arrayMovie
+      } else {
+        filteredMovies = this.arrayMovie.filter((element) => {
+          if (element.genre_ids.includes(this.movieGenreSelected)) {
+            return element;
+          }
+        })
+        return this.arrayMovie = filteredMovies
+      }
+  },
   filterTV: async function() {
-    if (this.searchInput === '') {
+    if (this.searchInput.length === 0) {
+      this.arrayTV = [];
       let that = this;
       return axios.get('https://api.themoviedb.org/3/discover/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.TVGenreSelected)
       .then(function(resp) {
         return that.arrayTV = resp.data.results;
       })
     }
-    let filteredTV = this.arrayTV.filter((element) => {
-      if (element.genre_ids.includes(this.TVGenreSelected) || this.TVGenreSelected === 0) {
-        return element;
+    await this.searchTV();
+    let filteredTV = [];
+      if (this.TVGenreSelected === 0) {
+        return this.arrayTV
+      } else {
+        filteredTV = this.arrayTV.filter((element) => {
+          if (element.genre_ids.includes(this.TVGenreSelected)) {
+            return element;
+          }
+        })
+        return this.arrayTV = filteredTV
       }
-    })
-    return this.arrayTV = filteredTV;
- },
+  },
   resultImg: function(el) {
     if (el.poster_path === null) {
       return 'img/placeholder.png'
