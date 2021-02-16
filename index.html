@@ -24,7 +24,7 @@
         <div>Film</div>
 
         <div class="icon" @click="showSearch"><i class="fa fa-search" aria-hidden="true"></i></div>
-        <input type="text" placeholder="Cerca un film o una serie TV..." v-model="searchInput" @keyup.enter="search">
+        <input type="text" placeholder="Cerca un film o una serie TV..." v-model="searchInput" @keyup.enter="checkMovie(); checkTV()">
 
       </header>
 
@@ -32,7 +32,7 @@
 
         <!-- risultati per film -->
         <div class="title">{{movieTitle}}
-          <select v-model="movieGenreSelected" @change="filterMovie()">
+          <select v-model="movieGenreSelected" @change="checkMovie()">
             <option :value="0">tutti i generi</option>
             <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
           </select>
@@ -97,7 +97,7 @@
 
         <!-- risultati per serie TV -->
         <div class="title">{{TVTitle}}
-          <select v-model="TVGenreSelected" @change="filterTV()">
+          <select v-model="TVGenreSelected" @change="checkTV()">
             <option :value="0">tutti i generi</option>
             <option v-for="genre in TVGenres" :value="genre.id">{{genre.name}}</option>
           </select>
