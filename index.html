@@ -19,9 +19,9 @@
       <header>
 
         <img class="logo" src="img/logo-img.png" alt="">
-        <div>Home</div>
-        <div>Serie TV</div>
-        <div>Film</div>
+        <div @click="allResults">Home</div>
+        <div @click="onlyTV">Serie TV</div>
+        <div @click="onlyMovie">Film</div>
 
         <div class="icon" @click="showSearch"><i class="fa fa-search" aria-hidden="true"></i></div>
         <input type="text" placeholder="Cerca un film o una serie TV..." v-model="searchInput" @keyup.enter="checkMovie(); checkTV()">
@@ -30,132 +30,136 @@
 
       <main>
 
-        <!-- risultati per film -->
-        <div class="title">{{movieTitle}}
-          <select v-model="movieGenreSelected" @change="checkMovie()">
-            <option :value="0">tutti i generi</option>
-            <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
-          </select>
-        </div>
+        <div class="movie-container">
+          <!-- risultati per film -->
+          <div class="title">{{movieTitle}}
+            <select v-model="movieGenreSelected" @change="checkMovie()">
+              <option :value="0">tutti i generi</option>
+              <option v-for="genre in movieGenres" :value="genre.id">{{genre.name}}</option>
+            </select>
+          </div>
 
-        <div class="results-container">
-          <!-- **********FILM********** -->
-          <div class="movie" v-for="(movie, index) in arrayMovie">
+          <div class="results-container">
+            <!-- **********FILM********** -->
+            <div class="movie" v-for="(movie, index) in arrayMovie">
 
-            <img class="result-image" :src="resultImg(movie)" @mouseenter="showInfo('movie-info', index, movie); getMovieActors(movie.id)">
-            <!-- titolo alternativo a poster path -->
-            <div class="title-no-image"v-if="noImg(movie)" >{{movie.title}}</div>
+              <img class="result-image" :src="resultImg(movie)" @mouseenter="showInfo('movie-info', index, movie); getMovieActors(movie.id)">
+              <!-- titolo alternativo a poster path -->
+              <div class="title-no-image"v-if="noImg(movie)" >{{movie.title}}</div>
 
-            <div class="result-info movie-info" @mouseleave="hideInfo('movie-info', index, movie)">
+              <div class="result-info movie-info" @mouseleave="hideInfo('movie-info', index, movie)">
 
-              <div>
-                <span class="data-title">Titolo: </span>
-                <span class="data-text  movie-title">{{movie.title}}</span>
+                <div>
+                  <span class="data-title">Titolo: </span>
+                  <span class="data-text  movie-title">{{movie.title}}</span>
+                </div>
+
+                <div>
+                  <span class="data-title">Titolo originale: </span>
+                  <span class="data-text">{{movie.original_title}}</span>
+                </div>
+
+                <div>
+                  <span class="data-title">Lingua originale: </span>
+                  <span class="data-text">
+                    <span v-if="movie.original_language === 'xx'">unknown</span>
+                    <div class="result-language"><img :src="getFlag(movie)"></div>
+                  </span>
+                </div>
+
+                <div>
+                  <span class="data-title">Voto: </span>
+                  <span class="data-text">
+                    <!-- stelle piene -->
+                    <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(movie)"></i>
+                    <!-- stelle vuote -->
+                    <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5 -resultRating(movie))"></i>
+                  </span>
+                </div>
+
+                <div>
+                  <span class="data-title">Genere: </span>
+                  <span class="data-text">{{getGenre(movie, movieGenres)}}</span>
+                </div>
+
+                <div>
+                  <span class="data-title">Attori: </span>
+                  <span class="data-text">{{showActors(movieActors)}}</span>
+                </div>
+
+                <div>
+                  <span class="data-title">Overview: </span>
+                  <span class="data-text">{{movie.overview}}</span>
+                </div>
+
               </div>
-
-              <div>
-                <span class="data-title">Titolo originale: </span>
-                <span class="data-text">{{movie.original_title}}</span>
-              </div>
-
-              <div>
-                <span class="data-title">Lingua originale: </span>
-                <span class="data-text">
-                  <span v-if="movie.original_language === 'xx'">unknown</span>
-                  <div class="result-language"><img :src="getFlag(movie)"></div>
-                </span>
-              </div>
-
-              <div>
-                <span class="data-title">Voto: </span>
-                <span class="data-text">
-                  <!-- stelle piene -->
-                  <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(movie)"></i>
-                  <!-- stelle vuote -->
-                  <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5 -resultRating(movie))"></i>
-                </span>
-              </div>
-
-              <div>
-                <span class="data-title">Genere: </span>
-                <span class="data-text">{{getGenre(movie, movieGenres)}}</span>
-              </div>
-
-              <div>
-                <span class="data-title">Attori: </span>
-                <span class="data-text">{{showActors(movieActors)}}</span>
-              </div>
-
-              <div>
-                <span class="data-title">Overview: </span>
-                <span class="data-text">{{movie.overview}}</span>
-              </div>
-
             </div>
           </div>
         </div>
 
-        <!-- risultati per serie TV -->
-        <div class="title">{{TVTitle}}
-          <select v-model="TVGenreSelected" @change="checkTV()">
-            <option :value="0">tutti i generi</option>
-            <option v-for="genre in TVGenres" :value="genre.id">{{genre.name}}</option>
-          </select>
-        </div>
+        <div class="tv-container">
+          <!-- risultati per serie TV -->
+          <div class="title">{{TVTitle}}
+            <select v-model="TVGenreSelected" @change="checkTV()">
+              <option :value="0">tutti i generi</option>
+              <option v-for="genre in TVGenres" :value="genre.id">{{genre.name}}</option>
+            </select>
+          </div>
 
-        <div class="results-container">
-          <!-- **********SERIE TV********** -->
-          <div class="tv" v-for="(tv, index) in arrayTV">
+          <div class="results-container">
+            <!-- **********SERIE TV********** -->
+            <div class="tv" v-for="(tv, index) in arrayTV">
 
-            <img class="result-image" :src="resultImg(tv)" @mouseenter="showInfo('tv-info', index, tv); getTVActors(tv.id)">
-            <!-- titolo alternativo a poster path -->
-            <div class="title-no-image" v-if="noImg(tv)">{{tv.name}}</div>
+              <img class="result-image" :src="resultImg(tv)" @mouseenter="showInfo('tv-info', index, tv); getTVActors(tv.id)">
+              <!-- titolo alternativo a poster path -->
+              <div class="title-no-image" v-if="noImg(tv)">{{tv.name}}</div>
 
-            <div class="result-info tv-info" @mouseleave="hideInfo('tv-info', index, tv)">
+              <div class="result-info tv-info" @mouseleave="hideInfo('tv-info', index, tv)">
 
-              <div>
-                <span class="data-title">Titolo: </span>
-                <span class="data-text  movie-title">{{tv.name}}</span>
+                <div>
+                  <span class="data-title">Titolo: </span>
+                  <span class="data-text  movie-title">{{tv.name}}</span>
+                </div>
+
+                <div>
+                  <span class="data-title">Titolo originale: </span>
+                  <span class="data-text">{{tv.original_name}}</span>
+                </div>
+
+                <div>
+                  <span class="data-title">Lingua originale: </span>
+                  <span class="data-text">
+                    <span v-if="tv.original_language === 'xx'">unknown</span>
+                    <div class="result-language"><img :src="getFlag(tv)"></div>
+                  </span>
+                </div>
+
+                <div>
+                  <span class="data-title">Voto: </span>
+                  <span class="data-text">
+                    <!-- stelle piene -->
+                    <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(tv)"></i>
+                    <!-- stelle vuote -->
+                    <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5- resultRating(tv))"></i>
+                  </span>
+                </div>
+
+                <div>
+                  <span class="data-title">Genere: </span>
+                  <span class="data-text">{{getGenre(tv, TVGenres)}}</span>
+                </div>
+
+                <div>
+                  <span class="data-title">Attori: </span>
+                  <span class="data-text">{{showActors(TVActors)}}</span>
+                </div>
+
+                <div>
+                  <span class="data-title">Overview: </span>
+                  <span class="data-text">{{tv.overview}}</span>
+                </div>
+
               </div>
-
-              <div>
-                <span class="data-title">Titolo originale: </span>
-                <span class="data-text">{{tv.original_name}}</span>
-              </div>
-
-              <div>
-                <span class="data-title">Lingua originale: </span>
-                <span class="data-text">
-                  <span v-if="tv.original_language === 'xx'">unknown</span>
-                  <div class="result-language"><img :src="getFlag(tv)"></div>
-                </span>
-              </div>
-
-              <div>
-                <span class="data-title">Voto: </span>
-                <span class="data-text">
-                  <!-- stelle piene -->
-                  <i class="fa fa-star" aria-hidden="true" v-for="star in resultRating(tv)"></i>
-                  <!-- stelle vuote -->
-                  <i class="fa fa-star-o" aria-hidden="true" v-for="star in (5- resultRating(tv))"></i>
-                </span>
-              </div>
-
-              <div>
-                <span class="data-title">Genere: </span>
-                <span class="data-text">{{getGenre(tv, TVGenres)}}</span>
-              </div>
-
-              <div>
-                <span class="data-title">Attori: </span>
-                <span class="data-text">{{showActors(TVActors)}}</span>
-              </div>
-
-              <div>
-                <span class="data-title">Overview: </span>
-                <span class="data-text">{{tv.overview}}</span>
-              </div>
-
             </div>
           </div>
         </div>

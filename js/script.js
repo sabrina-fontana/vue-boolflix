@@ -38,6 +38,18 @@ mounted() {
   this.popularTV();
 },
 methods: {
+  onlyMovie: function() {
+    document.getElementsByClassName('movie-container')[0].style.display = 'block';
+    document.getElementsByClassName('tv-container')[0].style.display = 'none';
+  },
+  onlyTV: function() {
+    document.getElementsByClassName('movie-container')[0].style.display = 'none';
+    document.getElementsByClassName('tv-container')[0].style.display = 'block';
+  },
+  allResults: function() {
+    document.getElementsByClassName('movie-container')[0].style.display = 'block';
+    document.getElementsByClassName('tv-container')[0].style.display = 'block';
+  },
   showSearch: function() {
     let input = document.getElementsByTagName('input')[0];
     input.classList.toggle('active');
@@ -77,8 +89,9 @@ methods: {
     }
     // CASO 2 - input vuoto e genere selezionato -> ritorno discover genres
     if (this.searchInput.length === 0 && this.movieGenreSelected !== 0) {
+      that.movieTitle = `FILM più popolari per il genere: `;
       return axios
-      .get('https://api.themoviedb.org/3/discover/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.movieGenreSelected)
+      .get('https://api.themoviedb.org/3/discover/movie?api_key=' + this.apiKey + '&with_genres=' + this.movieGenreSelected)
       .then(function(resp) {
         return that.arrayMovie = resp.data.results;
       })
@@ -86,7 +99,12 @@ methods: {
     // CASO 3 - input popolato e genere selezionato -> filtro per titolo e poi per genere
     if (this.searchInput.length !== 0 && this.movieGenreSelected !== 0) {
       return axios
-      .get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=1&query=' + this.searchInput)
+      .get('https://api.themoviedb.org/3/search/movie', {
+          params: {
+            api_key: this.apiKey,
+            query: this.searchInput
+           }
+        })
       .then(function(resp) {
         that.movieTitle = `FILM risultati per: ${that.searchInput}`;
         let filteredMovies = resp.data.results.filter((element) => {
@@ -100,7 +118,12 @@ methods: {
     // CASO 4 - input popolato e genere vuoto -> filtro per titolo
     if (this.searchInput.length !== 0 && this.movieGenreSelected === 0) {
       return axios
-      .get('https://api.themoviedb.org/3/search/movie?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=1&query=' + this.searchInput)
+      .get('https://api.themoviedb.org/3/search/movie', {
+        params: {
+          api_key: this.apiKey,
+          query: this.searchInput
+         }
+      })
       .then(function(resp) {
         that.movieTitle = `FILM risultati per: ${that.searchInput}`;
         return that.arrayMovie = resp.data.results;
@@ -115,8 +138,9 @@ methods: {
     }
     // CASO 2 - input vuoto e genere selezionato -> ritorno discover genres
     if (this.searchInput.length === 0 && this.TVGenreSelected !== 0) {
+      that.TVTitle = `SERIE TV più popolari per il genere: `;
       return axios
-      .get('https://api.themoviedb.org/3/discover/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&with_genres=' + this.TVGenreSelected)
+      .get('https://api.themoviedb.org/3/discover/tv?api_key=' + this.apiKey + '&with_genres=' + this.TVGenreSelected)
       .then(function(resp) {
         return that.arrayTV = resp.data.results;
       })
@@ -124,23 +148,33 @@ methods: {
     // CASO 3 - input popolato e genere selezionato -> filtro per titolo e poi per genere
     if (this.searchInput.length !== 0 && this.TVGenreSelected !== 0) {
       return axios
-      .get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=1&query=' + this.searchInput)
+      .get('https://api.themoviedb.org/3/search/tv', {
+        params: {
+          api_key: this.apiKey,
+          query: this.searchInput
+         }
+      })
       .then(function(resp) {
-        that.TVTitle = `FILM risultati per: ${that.searchInput}`;
+        that.TVTitle = `SERIE TV risultati per: ${that.searchInput}`;
         let filteredTV = resp.data.results.filter((element) => {
           if (element.genre_ids.includes(that.TVGenreSelected)) {
             return element;
           }
         })
-        return this.arrayTV = filteredTV;
+        return that.arrayTV = filteredTV;
       })
     }
     // CASO 4 - input popolato e genere vuoto -> filtro per titolo
     if (this.searchInput.length !== 0 && this.TVGenreSelected === 0) {
       return axios
-      .get('https://api.themoviedb.org/3/search/tv?api_key=a2092b04d9693f9c0da61a113dc5f29a&page=1&query=' + this.searchInput)
+      .get('https://api.themoviedb.org/3/search/tv', {
+        params: {
+          api_key: this.apiKey,
+          query: this.searchInput
+         }
+      })
       .then(function(resp) {
-        that.TVTitle = `FILM risultati per: ${that.searchInput}`;
+        that.TVTitle = `SERIE TV risultati per: ${that.searchInput}`;
         return that.arrayTV = resp.data.results;
       })
     }

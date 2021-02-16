@@ -98,7 +98,7 @@ select {
   border-radius: 8px;
   background: #2b2b2b;
   color: #cecece;
-  font: 16px 'Open Sans', sans-serif;
+  font: 20px 'Oswald', sans-serif;
   padding: 2px;
   margin-left: 10px;
   border: none;
@@ -121,15 +121,13 @@ select option {
 .movie, .tv {
   margin: 0 2px;
   display: flex;
-  flex-direction: column;
   position: relative;
-  transition: transform .4s;
+  transition: transform .3s;
 }
 
 .movie:hover, .tv:hover {
   transform: scale(1.15);
-  position: relative;
-  z-index: 10;
+  z-index: 1;
 }
 
 .result-image {
